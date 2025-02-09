@@ -43,4 +43,13 @@ public class ProductRepository {
             product.setProductQuantity(updatedProduct.getProductQuantity());
         }
     }
+
+    // Deletes the product based on ID
+    public void delete(String id) {
+        if (id != null) {
+            productData.removeIf(product -> id.equals(product.getProductId()));
+        }
+    }
 }
+
+
