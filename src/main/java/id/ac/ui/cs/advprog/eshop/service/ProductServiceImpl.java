@@ -21,7 +21,6 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
-
     @Override
     public List<Product> findAll() {
         Iterator<Product> productIterator = productRepository.findAll();
@@ -29,4 +28,17 @@ public class ProductServiceImpl implements ProductService {
         productIterator.forEachRemaining(allProduct::add);
         return allProduct;
     }
+
+    // Finds the product based on ID
+    @Override
+    public Product findById(String id) {
+        return productRepository.findById(id);
+    }
+
+    // Updates the product based on the intended ID
+    @Override
+    public void update(String id, Product product) {
+        productRepository.update(id, product);
+    }
+
 }
