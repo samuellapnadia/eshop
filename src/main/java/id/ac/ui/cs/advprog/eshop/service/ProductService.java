@@ -8,4 +8,5 @@ public interface ProductService {
     List<Product> findAll();
     Product findById(String id); // Finds the product based on ID
     void update(String id, Product product); // Updates the product based on ID
+    void delete(String id); // Delete the product based on ID
 }
