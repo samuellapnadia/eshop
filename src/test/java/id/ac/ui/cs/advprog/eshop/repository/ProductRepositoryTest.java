@@ -62,4 +62,55 @@ class ProductRepositoryTest {
         assertEquals(product2.getProductId(), savedProduct.getProductId());
         assertFalse(productIterator.hasNext());
     }
+    // Update an existing product
+    @Test
+    void testUpdateProduct_Success() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63777");
+        product.setProductName("Old Name");
+        product.setProductQuantity(50);
+
+        productRepository.create(product);
+
+        Product updatedProduct = new Product();
+        updatedProduct.setProductName("Imud Product");
+        updatedProduct.setProductQuantity(75);
+
+        productRepository.update("eb558e9f-1c39-460e-8860-71af6af63777", updatedProduct);
+        Product modifiedProduct = productRepository.findById("eb558e9f-1c39-460e-8860-71af6af63777");
+
+        assertEquals("Imud Product", modifiedProduct.getProductName());
+        assertEquals(75, modifiedProduct.getProductQuantity());
+    }
+    // Update a non-existent product
+    @Test
+    void testUpdateProduct_Fail_ProductNotFound() {
+        Product updatedProduct = new Product();
+        updatedProduct.setProductName("Ghoib Product");
+        updatedProduct.setProductQuantity(20);
+
+        productRepository.update("a0f9646e-9022-437d-a0bf-d0821dde9096", updatedProduct);
+        assertNull(productRepository.findById("a0f9646e-9022-437d-a0bf-d0821dde9096"));
+    }
+    // Delete an existing product
+    @Test
+    void testDeleteProduct_Success() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63777");
+        product.setProductName("Un-Imud Product");
+        product.setProductQuantity(50);
+
+        productRepository.create(product);
+        assertNotNull(productRepository.findById("eb558e9f-1c39-460e-8860-71af6af63777"));
+
+        productRepository.delete("eb558e9f-1c39-460e-8860-71af6af63777");
+        assertNull(productRepository.findById("eb558e9f-1c39-460e-8860-71af6af63777"));
+    }
+
+    // Delete a non-existent product
+    @Test
+    void testDeleteProduct_Fail_ProductNotFound() {
+        productRepository.delete("a0f9646e-9022-437d-a0bf-d0821dde9096");
+        assertNull(productRepository.findById("a0f9646e-9022-437d-a0bf-d0821dde9096"));
+    }
 }
