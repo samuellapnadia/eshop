@@ -19,6 +19,7 @@ class ProductRepositoryTest {
     ProductRepository productRepository;
     @BeforeEach
     void setUp() {
+        // No setup required for this test class.
     }
     @Test
     void testCreateAndFind() {
