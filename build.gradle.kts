@@ -77,6 +77,9 @@ tasks.test {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
+    reports {
+        xml.required = true
+    }
 }
 
 tasks.withType<Test>().configureEach {
@@ -88,5 +91,6 @@ sonar {
         property("sonar.projectKey", "samuellapnadia_eshop")
         property("sonar.organization", "samuellapnadia")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
 }
