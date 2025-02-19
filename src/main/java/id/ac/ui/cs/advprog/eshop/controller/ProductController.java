@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.eshop.controller;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,23 +13,20 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
 
-    private final ProductService service;
-    private static final String REDIRECT_PRODUCT_LIST = "redirect:/product/list";
-
-    public ProductController(ProductService service) {
-        this.service = service;
-    }
+    @Autowired
+    private ProductService service;
 
     @GetMapping("/create")
     public String createProductPage(Model model) {
-        model.addAttribute("product", new Product());
+        Product product = new Product();
+        model.addAttribute("product", product);
         return "createProduct";
     }
 
     @PostMapping("/create")
-    public String createProductPost(@ModelAttribute Product product) {
+    public String createProductPost(@ModelAttribute Product product, Model model) {
         service.create(product);
-        return REDIRECT_PRODUCT_LIST;
+        return "redirect:/product/list";
     }
 
     @GetMapping("/list")
@@ -38,25 +36,27 @@ public class ProductController {
         return "productList";
     }
 
+    // Shows edit product page
     @GetMapping("/edit/{id}")
     public String editProductPage(@PathVariable String id, Model model) {
         Product product = service.findById(id);
         if (product == null) {
-            return REDIRECT_PRODUCT_LIST;
+            return "redirect:/product/list";
         }
         model.addAttribute("product", product);
         return "editProduct";
     }
 
+    // Handles form submission to edit product
     @PostMapping("/edit/{id}")
     public String editProductPost(@PathVariable String id, @ModelAttribute Product product) {
         service.update(id, product);
-        return REDIRECT_PRODUCT_LIST;
+        return "redirect:/product/list";
     }
-
+    // Deletes the product based on the ID
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable String id) {
         service.delete(id);
-        return REDIRECT_PRODUCT_LIST;
+        return "redirect:/product/list";
     }
 }
