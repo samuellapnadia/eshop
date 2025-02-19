@@ -113,4 +113,47 @@ class ProductRepositoryTest {
         productRepository.delete("a0f9646e-9022-437d-a0bf-d0821dde9096");
         assertNull(productRepository.findById("a0f9646e-9022-437d-a0bf-d0821dde9096"));
     }
+
+    // Create product with null ID (should generate UUID)
+    @Test
+    void testCreateProduct_WithNullId() {
+        Product product = new Product();
+        product.setProductName("Unnamed Product");
+        product.setProductQuantity(10);
+
+        Product createdProduct = productRepository.create(product);
+
+        assertNotNull(createdProduct.getProductId());
+        assertEquals("Unnamed Product", createdProduct.getProductName());
+        assertEquals(10, createdProduct.getProductQuantity());
+    }
+
+    // Create product with empty ID (should generate UUID)
+    @Test
+    void testCreateProduct_WithEmptyId() {
+        Product product = new Product();
+        product.setProductId("");
+        product.setProductName("Empty ID Product");
+        product.setProductQuantity(20);
+
+        Product createdProduct = productRepository.create(product);
+
+        assertNotNull(createdProduct.getProductId());
+        assertEquals("Empty ID Product", createdProduct.getProductName());
+        assertEquals(20, createdProduct.getProductQuantity());
+    }
+
+    // findById with null input
+    @Test
+    void testFindById_WithNullId() {
+        assertNull(productRepository.findById(null));
+    }
+
+    // Delete product with null ID
+    @Test
+    void testDeleteProduct_WithNullId() {
+        productRepository.delete(null);
+        assertNull(productRepository.findById(null));
+    }
+
 }
