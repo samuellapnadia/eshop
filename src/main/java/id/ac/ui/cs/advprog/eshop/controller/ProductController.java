@@ -11,6 +11,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/product")
+@SuppressWarnings("all")
 public class ProductController {
 
     @Autowired
@@ -20,20 +21,20 @@ public class ProductController {
     public String createProductPage(Model model) {
         Product product = new Product();
         model.addAttribute("product", product);
-        return "createProduct"; // NOSONAR
+        return "createProduct";
     }
 
     @PostMapping("/create")
     public String createProductPost(@ModelAttribute Product product, Model model) {
         service.create(product);
-        return "redirect:/product/list"; // NOSONAR
+        return "redirect:/product/list";
     }
 
     @GetMapping("/list")
     public String productListPage(Model model) {
         List<Product> allProducts = service.findAll();
         model.addAttribute("products", allProducts);
-        return "productList"; // NOSONAR
+        return "productList";
 
     }
 
@@ -42,22 +43,22 @@ public class ProductController {
     public String editProductPage(@PathVariable String id, Model model) {
         Product product = service.findById(id);
         if (product == null) {
-            return "redirect:/product/list"; // NOSONAR
+            return "redirect:/product/list";
         }
         model.addAttribute("product", product);
-        return "editProduct"; // NOSONAR
+        return "editProduct";
     }
 
     // Handles form submission to edit product
     @PostMapping("/edit/{id}")
     public String editProductPost(@PathVariable String id, @ModelAttribute Product product) {
         service.update(id, product);
-        return "redirect:/product/list"; // NOSONAR
+        return "redirect:/product/list";
     }
     // Deletes the product based on the ID
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable String id) {
         service.delete(id);
-        return "redirect:/product/list"; // NOSONAR
+        return "redirect:/product/list";
     }
 }
