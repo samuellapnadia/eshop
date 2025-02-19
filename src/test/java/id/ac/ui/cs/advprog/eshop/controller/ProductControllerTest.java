@@ -40,12 +40,15 @@ class ProductControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
     }
 
+
     @Test
     void testCreateProductPage() throws Exception {
         mockMvc.perform(get("/product/create"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("createProduct"));
+                .andExpect(view().name("createProduct"))
+                .andExpect(model().attributeExists("product"));
     }
+
 
     @Test
     void testCreateProductPost() throws Exception {
@@ -59,6 +62,7 @@ class ProductControllerTest {
         verify(productService, times(1)).create(any(Product.class));
     }
 
+
     @Test
     void testProductListPage() throws Exception {
         List<Product> products = new ArrayList<>();
@@ -68,6 +72,8 @@ class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("productList"))
                 .andExpect(model().attributeExists("products"));
+
+        verify(productService, times(1)).findAll();
     }
 
     @Test
@@ -80,6 +86,8 @@ class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("editProduct"))
                 .andExpect(model().attributeExists("product"));
+
+        verify(productService, times(1)).findById("1");
     }
 
     @Test
@@ -89,14 +97,12 @@ class ProductControllerTest {
         mockMvc.perform(get("/product/edit/99"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/product/list"));
+
+        verify(productService, times(1)).findById("99");
     }
 
     @Test
     void testEditProductPost() throws Exception {
-        Product product = new Product();
-        product.setProductId("1");
-        product.setProductName("Updated Product");
-
         mockMvc.perform(post("/product/edit/1")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("productName", "Updated Product")
@@ -106,6 +112,7 @@ class ProductControllerTest {
 
         verify(productService, times(1)).update(eq("1"), any(Product.class));
     }
+
 
     @Test
     void testDeleteProduct() throws Exception {
