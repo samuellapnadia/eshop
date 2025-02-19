@@ -50,38 +50,37 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
 }
 
-jacoco {
-    toolVersion = "0.8.10"
+tasks.register<Test>(name = "unitTest") {
+    description = "Runs unit tests."
+    group = "verification"
+
+    filter {
+        excludeTestsMatching("*FunctionalTest")
+    }
+}
+
+tasks.register<Test>(name = "functionalTest") {
+    description = "Runs functional tests."
+    group = "verification"
+
+    filter {
+        includeTestsMatching("*FunctionalTest")
+    }
 }
 
 tasks.test {
-    useJUnitPlatform()
+    filter {
+        excludeTestsMatching("*FunctionalTest")
+    }
     finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-    }
 }
 
-tasks.jacocoTestCoverageVerification {
-    dependsOn(tasks.jacocoTestReport)
-    violationRules {
-        rule {
-            element = "CLASS"
-            limit {
-                counter = "LINE"
-                value = "COVEREDRATIO"
-            }
-        }
-    }
-}
-
-tasks.check {
-    dependsOn(tasks.jacocoTestCoverageVerification)
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
 
 sonar {
@@ -89,10 +88,5 @@ sonar {
         property("sonar.projectKey", "samuellapnadia_eshop")
         property("sonar.organization", "samuellapnadia")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
-}
-
-tasks.named("sonar") {
-    dependsOn(tasks.jacocoTestReport)
 }
