@@ -55,6 +55,8 @@ class ProductControllerTest {
                         .param("productQuantity", "10"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/product/list"));
+
+        verify(productService, times(1)).create(any(Product.class));
     }
 
     @Test
@@ -64,31 +66,37 @@ class ProductControllerTest {
 
         mockMvc.perform(get("/product/list"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("productList"));
+                .andExpect(view().name("productList"))
+                .andExpect(model().attributeExists("products"));
     }
 
     @Test
     void testEditProductPage_ProductExists() throws Exception {
         Product product = new Product();
-        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63b29");
-        when(productService.findById("eb558e9f-1c39-460e-8860-71af6af63b29")).thenReturn(product);
+        product.setProductId("1");
+        when(productService.findById("1")).thenReturn(product);
 
-        mockMvc.perform(get("/product/edit/eb558e9f-1c39-460e-8860-71af6af63b29"))
+        mockMvc.perform(get("/product/edit/1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("editProduct"));
+                .andExpect(view().name("editProduct"))
+                .andExpect(model().attributeExists("product"));
     }
 
     @Test
     void testEditProductPage_ProductNotFound() throws Exception {
-        when(productService.findById("eb558e9f-1c39-460e-8860-71af6af63b21")).thenReturn(null);
+        when(productService.findById("99")).thenReturn(null);
 
-        mockMvc.perform(get("/product/edit/eb558e9f-1c39-460e-8860-71af6af63b21"))
+        mockMvc.perform(get("/product/edit/99"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/product/list"));
     }
 
     @Test
     void testEditProductPost() throws Exception {
+        Product product = new Product();
+        product.setProductId("1");
+        product.setProductName("Updated Product");
+
         mockMvc.perform(post("/product/edit/1")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("productName", "Updated Product")
@@ -106,26 +114,5 @@ class ProductControllerTest {
                 .andExpect(redirectedUrl("/product/list"));
 
         verify(productService, times(1)).delete("1");
-    }
-}
-
-@ExtendWith(MockitoExtension.class)
-class HomeControllerTest {
-
-    private MockMvc mockMvc;
-
-    @InjectMocks
-    private HomeController homeController;
-
-    @BeforeEach
-    void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(homeController).build();
-    }
-
-    @Test
-    void testHomePage() throws Exception {
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("Home"));
     }
 }
