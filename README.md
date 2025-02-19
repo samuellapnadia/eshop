@@ -17,7 +17,7 @@ During the development process, I encountered an issue with the Whitelabel Error
 2. Creating this new functional test suite may introduce clean code concerns that could reduce overall code quality. Some of these include code duplication which leads to increased maintenance effort and makes changes more error-prone, and another concern is a lack of reusability which violates the DRY (Don't Repeat Yourself) principle. To address these issues, we can implement improvements by extracting common setup logic into a base class, allowing all test classes to extend it and eliminate redundant code. By doing this, we can achieve cleaner, more reusable, and maintainable test suites. 
 
 # MODULE 2
-## Reflection 2
+## Reflection 
 1. Code quality issues i fixed:
 - Removing unused imports – Several files in this project contained unused import statements. I removed them to improve code clarity and maintainability. After each removal, I re-ran the tests to ensure that no dependencies were mistakenly deleted.
 - Removing the declaration of a thrown exception – In one of the functional tests, there was an unnecessary throws declaration. Exception in ‘throws’ clauses should not be superfluous. Since it wasn’t needed, I removed it and also used NoSuchElementException to handle elements that are not found.
