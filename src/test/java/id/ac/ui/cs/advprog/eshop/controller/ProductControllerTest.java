@@ -108,3 +108,24 @@ class ProductControllerTest {
         verify(productService, times(1)).delete("1");
     }
 }
+
+@ExtendWith(MockitoExtension.class)
+class HomeControllerTest {
+
+    private MockMvc mockMvc;
+
+    @InjectMocks
+    private HomeController homeController;
+
+    @BeforeEach
+    void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(homeController).build();
+    }
+
+    @Test
+    void testHomePage() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("Home"));
+    }
+}
