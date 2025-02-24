@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @Controller
 @RequestMapping("/product")
 @SuppressWarnings("all")
@@ -65,6 +66,7 @@ public class ProductController {
     }
 }
 
+
 @Controller
 @RequestMapping("/car")
 class CarController extends ProductController {
@@ -80,18 +82,17 @@ class CarController extends ProductController {
     }
 
     @PostMapping("/createCar")
-    public String createCarPost(@ModelAttribute Car car, Model model) {
+    public String createCarPost(@ModelAttribute Car car, Model model){
         carservice.create(car);
         return "redirect:listCar";
     }
 
     @GetMapping("/listCar")
-    public String carListPage(Model model) {
+    public String carListPage(Model model){
         List<Car> allCars = carservice.findAll();
         model.addAttribute("cars", allCars);
         return "carList";
     }
-
     @GetMapping("/editCar/{carId}")
     public String editCarPage(@PathVariable String carId, Model model) {
         Car car = carservice.findById(carId);
@@ -103,6 +104,7 @@ class CarController extends ProductController {
     public String editCarPost(@ModelAttribute Car car, Model model) {
         System.out.println(car.getCarId());
         carservice.update(car.getCarId(), car);
+
         return "redirect:listCar";
     }
 
