@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +28,6 @@ class ProductControllerTest {
     @Mock
     private ProductService productService;
 
-    @Mock
-    private Model model;
-
     @InjectMocks
     private ProductController productController;
 
@@ -40,15 +36,13 @@ class ProductControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
     }
 
-
     @Test
     void testCreateProductPage() throws Exception {
         mockMvc.perform(get("/product/create"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("createProduct"))
+                .andExpect(view().name("CreateProduct"))
                 .andExpect(model().attributeExists("product"));
     }
-
 
     @Test
     void testCreateProductPost() throws Exception {
@@ -62,7 +56,6 @@ class ProductControllerTest {
         verify(productService, times(1)).create(any(Product.class));
     }
 
-
     @Test
     void testProductListPage() throws Exception {
         List<Product> products = new ArrayList<>();
@@ -70,7 +63,7 @@ class ProductControllerTest {
 
         mockMvc.perform(get("/product/list"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("productList"))
+                .andExpect(view().name("ProductList"))
                 .andExpect(model().attributeExists("products"));
 
         verify(productService, times(1)).findAll();
@@ -79,12 +72,11 @@ class ProductControllerTest {
     @Test
     void testEditProductPage_ProductExists() throws Exception {
         Product product = new Product();
-        product.setProductId("1");
         when(productService.findById("1")).thenReturn(product);
 
         mockMvc.perform(get("/product/edit/1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("editProduct"))
+                .andExpect(view().name("EditProduct"))
                 .andExpect(model().attributeExists("product"));
 
         verify(productService, times(1)).findById("1");
@@ -112,7 +104,6 @@ class ProductControllerTest {
 
         verify(productService, times(1)).update(eq("1"), any(Product.class));
     }
-
 
     @Test
     void testDeleteProduct() throws Exception {
