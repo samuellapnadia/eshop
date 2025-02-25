@@ -24,7 +24,7 @@ public class ProductController {
     public String createProductPage(Model model) {
         Product product = new Product();
         model.addAttribute("product", product);
-        return "createProduct";
+        return "CreateProduct";
     }
 
     @PostMapping("/create")
@@ -37,7 +37,7 @@ public class ProductController {
     public String productListPage(Model model) {
         List<Product> allProducts = service.findAll();
         model.addAttribute("products", allProducts);
-        return "productList";
+        return "ProductList";
 
     }
 
@@ -49,7 +49,7 @@ public class ProductController {
             return "redirect:/product/list";
         }
         model.addAttribute("product", product);
-        return "editProduct";
+        return "EditProduct";
     }
 
     // Handles form submission to edit product
@@ -78,7 +78,7 @@ class CarController extends ProductController {
     public String createCarPage(Model model) {
         Car car = new Car();
         model.addAttribute("car", car);
-        return "createCar";
+        return "CreateCar";
     }
 
     @PostMapping("/createCar")
@@ -91,13 +91,13 @@ class CarController extends ProductController {
     public String carListPage(Model model){
         List<Car> allCars = carservice.findAll();
         model.addAttribute("cars", allCars);
-        return "carList";
+        return "CarList";
     }
     @GetMapping("/editCar/{carId}")
     public String editCarPage(@PathVariable String carId, Model model) {
         Car car = carservice.findById(carId);
         model.addAttribute("car", car);
-        return "editCar";
+        return "EditCar";
     }
 
     @PostMapping("/editCar")
