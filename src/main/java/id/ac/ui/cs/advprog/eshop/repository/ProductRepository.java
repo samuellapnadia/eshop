@@ -4,7 +4,8 @@ import id.ac.ui.cs.advprog.eshop.model.Product;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ProductRepository extends GenericRepository<Product> {
+public class ProductRepository extends GenericRepository<Product> implements ProductRepositoryInterface {
+
     @Override
     protected String getId(Product product) {
         return product.getProductId();
