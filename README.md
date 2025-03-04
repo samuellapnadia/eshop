@@ -59,7 +59,6 @@ During the development process, I encountered an issue with the Whitelabel Error
 
   **Independent**
 * The testing methods uses @BeforeEach to make sure the starting data won’t be influenced by the previous tests.
-* Mockito is used for mocking, 
 
   **Repeatable**
 * The tests don’t rely on external conditions like files/database so it could be run many times with consistent results.
