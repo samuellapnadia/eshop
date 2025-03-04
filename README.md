@@ -49,3 +49,19 @@ During the development process, I encountered an issue with the Whitelabel Error
 - Tight Coupling (LSP and DIP): Tight coupling occurs when a high-level module directly depends on a low-level module. For example, if CarServiceImpl directly depends on a concrete class like CarRepository, any changes to the repository’s implementation would force to modify the service layer. This makes the system less flexible and harder to test.
 - Bloated and Unfocused Interfaces (ISP): When interfaces are not properly segregated, they tend to include methods that are not relevant to every implementing class. This forces classes to implement unnecessary functionalities, resulting in bloated interfaces. It can cause confusion and increase the likelihood of errors, as each class ends up handling more than what is required for its specific domain. For example, If I define a single, large repository interface that includes methods for handling operations for cars, products, and users. A repository meant only for car operations would then be forced to implement methods that are irrelevant to it. By breaking down the interfaces into smaller, domain-specific ones (like CarRepositoryInterface and ProductRepositoryInterface), each interface is kept focused on its intended purpose, reducing complexity and potential errors.
 
+# MODULE 4
+## Reflection 
+
+1. I find that this TDD workflow is beneficial in structuring my development process. Writing tests before implementing the functionality helps clarify requirements and ensures that each piece of code meets the intended behavior. Although it was confusing at first, I eventually realized that this approach enhances both the requirements and the overall behavior of the code. In the future, I aim to refine my test-writing skills to better anticipate edge cases and improve test coverage.
+2. **Fast**
+* The Unit tests that I made seem to be lightweight and fast when run because they only test the logic within the methods without any dependencies on external systems like a database/API.
+* I used Mockito to manipulate dependencies and speed up tests because they do not need operations in the database.
+  **Independent**
+* The testing methods uses @BeforeEach to make sure the starting data won’t be influenced by the previous tests.
+* Mockito is used for mocking, which makes sure test doesn’t depend on the real implementation of OrderRepository.
+  **Repeatable**
+* The tests don’t rely on external conditions like files/database so it could be run many times with consistent results.
+  **Self-validating**
+* The tests use assertions like assertEquals(), assertTrue(), dan assertThrows() which make sure each test gives a clear pass/fail result without having to analyze manually.
+  **Timely**
+* Tests written before the implementation is a part of TDD, ensuring the code is only developed to meet test requirements
