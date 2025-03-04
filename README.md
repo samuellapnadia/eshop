@@ -56,12 +56,16 @@ During the development process, I encountered an issue with the Whitelabel Error
 2. **Fast**
 * The Unit tests that I made seem to be lightweight and fast when run because they only test the logic within the methods without any dependencies on external systems like a database/API.
 * I used Mockito to manipulate dependencies and speed up tests because they do not need operations in the database.
+
   **Independent**
 * The testing methods uses @BeforeEach to make sure the starting data won’t be influenced by the previous tests.
-* Mockito is used for mocking, which makes sure test doesn’t depend on the real implementation of OrderRepository.
+* Mockito is used for mocking, 
+
   **Repeatable**
 * The tests don’t rely on external conditions like files/database so it could be run many times with consistent results.
+
   **Self-validating**
 * The tests use assertions like assertEquals(), assertTrue(), dan assertThrows() which make sure each test gives a clear pass/fail result without having to analyze manually.
+
   **Timely**
 * Tests written before the implementation is a part of TDD, ensuring the code is only developed to meet test requirements
