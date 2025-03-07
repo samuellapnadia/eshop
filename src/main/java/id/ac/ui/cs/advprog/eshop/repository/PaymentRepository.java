@@ -14,16 +14,27 @@ public class PaymentRepository {
     }
 
     public Payment save(Payment payment) {
+        Optional<Payment> existingPayment = paymentList.stream()
+                .filter(p -> p.getId().equals(payment.getId()))
+                .findFirst();
 
-            return null;
-
+        if (existingPayment.isPresent()) {
+            existingPayment.get().setStatus(payment.getStatus());
+            return existingPayment.get();
+        } else {
+            paymentList.add(payment);
+            return payment;
+        }
     }
 
     public Payment getPayment(String paymentId) {
-        return null;
+        return paymentList.stream()
+                .filter(payment -> payment.getId().equals(paymentId))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Payment> getAllPayments() {
-        return List.of();
+        return new ArrayList<>(paymentList);
     }
 }
