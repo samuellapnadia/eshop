@@ -3,8 +3,10 @@ package id.ac.ui.cs.advprog.eshop.model;
 import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PaymentTest {
@@ -23,27 +25,29 @@ public class PaymentTest {
 
     @Test
     void testCreatePaymentWithVoucherCodeSuccess() {
-        Payment payment = new Payment("Voucher", voucherData);
+        Payment payment = new Payment("Voucher", new HashMap<>(voucherData));
         assertEquals(PaymentStatus.SUCCESS, payment.getStatus());
     }
 
     @Test
     void testCreatePaymentWithBankTransferSuccess() {
-        Payment payment = new Payment("Bank Transfer", bankTransferData);
+        Payment payment = new Payment("Bank Transfer", new HashMap<>(bankTransferData));
         assertEquals(PaymentStatus.SUCCESS, payment.getStatus());
     }
 
     @Test
     void testCreatePaymentWithInvalidVoucher() {
-        voucherData.put("voucherCode", "SHOP1234ABCD5678");
-        Payment payment = new Payment("Voucher", voucherData);
+        Map<String, String> invalidVoucher = new HashMap<>(voucherData);
+        invalidVoucher.put("voucherCode", "SHOP1234ABCD5678");
+        Payment payment = new Payment("Voucher", invalidVoucher);
         assertEquals(PaymentStatus.REJECTED, payment.getStatus());
     }
 
     @Test
     void testCreatePaymentWithInvalidBankTransfer() {
-        bankTransferData.remove("bankName");
-        Payment payment = new Payment("Bank Transfer", bankTransferData);
+        Map<String, String> invalidBankTransfer = new HashMap<>(bankTransferData);
+        invalidBankTransfer.remove("bankName");
+        Payment payment = new Payment("Bank Transfer", invalidBankTransfer);
         assertEquals(PaymentStatus.REJECTED, payment.getStatus());
     }
 
@@ -65,22 +69,27 @@ public class PaymentTest {
 
     @Test
     void testSetStatusToSuccess() {
-        Payment payment = new Payment("Bank Transfer", bankTransferData);
+        Payment payment = new Payment("Bank Transfer", new HashMap<>(bankTransferData));
         payment.setStatus(PaymentStatus.SUCCESS);
         assertEquals(PaymentStatus.SUCCESS, payment.getStatus());
     }
 
-
     @Test
     void testSetStatusToRejected() {
-        Payment payment = new Payment("Voucher", voucherData);
+        Payment payment = new Payment("Voucher", new HashMap<>(voucherData));
         payment.setStatus(PaymentStatus.REJECTED);
         assertEquals(PaymentStatus.REJECTED, payment.getStatus());
     }
 
     @Test
-    void testSetStatusToInvalidStatus() {
-        Payment payment = new Payment("Bank Transfer", bankTransferData);
-        assertThrows(IllegalArgumentException.class, () -> payment.setStatus(PaymentStatus.valueOf("MEOW")));
+    void testSetStatusToNullThrowsException() {
+        Payment payment = new Payment("Voucher", new HashMap<>(voucherData));
+        assertThrows(IllegalArgumentException.class, () -> payment.setStatus(null));
+    }
+
+    @Test
+    void testCreatePaymentWithNullData() {
+        Payment payment = new Payment(null, null);
+        assertEquals(PaymentStatus.REJECTED, payment.getStatus());
     }
 }
