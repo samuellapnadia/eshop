@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.UUID;
 public class Payment {
     private String id;
     private String method;
-    private String status;
+    private PaymentStatus status;
     private Map<String, String> paymentData;
 
     public Payment(String method, Map<String, String> paymentData) {
@@ -20,35 +21,36 @@ public class Payment {
         this.status = validatePayment();
     }
 
-    private String validatePayment() {
-        if (paymentData == null) {
-            return "REJECTED";
+    private PaymentStatus validatePayment() {
+        if (paymentData == null || method == null) {
+            return PaymentStatus.REJECTED;
         }
 
-        if ("Bank Transfer".equalsIgnoreCase(this.method)) {
+        if ("Bank Transfer".equalsIgnoreCase(method)) {
             boolean isValid = paymentData.containsKey("bankName")
                     && paymentData.containsKey("referenceCode")
                     && !paymentData.get("bankName").isEmpty()
                     && !paymentData.get("referenceCode").isEmpty();
-            return isValid ? "SUCCESS" : "REJECTED";
+            return isValid ? PaymentStatus.SUCCESS : PaymentStatus.REJECTED;
         }
 
-        if ("Voucher".equalsIgnoreCase(this.method)) {
+        if ("Voucher".equalsIgnoreCase(method)) {
             String voucherCode = paymentData.get("voucherCode");
             boolean isValid = voucherCode != null &&
                     voucherCode.length() == 16 &&
                     voucherCode.startsWith("ESHOP") &&
                     voucherCode.replaceAll("[^0-9]", "").length() == 8;
-            return isValid ? "SUCCESS" : "REJECTED";
+            return isValid ? PaymentStatus.SUCCESS : PaymentStatus.REJECTED;
         }
 
-        return "REJECTED";
+        return PaymentStatus.REJECTED;
     }
 
-    public void setStatus(String status) {
-        if (!"SUCCESS".equals(status) && !"REJECTED".equals(status)) {
-            throw new IllegalArgumentException("Invalid payment status: " + status);
+    public void setStatus(PaymentStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Invalid payment status: null");
         }
         this.status = status;
     }
+
 }
